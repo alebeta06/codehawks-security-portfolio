@@ -32,17 +32,17 @@ rises without limit as the array grows.
   participant. Early entrants pay little; later entrants pay far more for the
   same action.
 - Beyond a certain number of players, a single `enterRaffle` call exceeds the
-  block gas limit (~30M on Ethereum) and can no longer be executed, locking out
-  all further participation.
+  Ethereum block gas limit and can no longer be executed, locking out all
+  further participation.
 - An attacker can deliberately inflate the array with cheap early entries to
   push the cost beyond reach, denying entry to others and/or securing an
   advantage in a raffle they already joined.
 
 ## Proof of Concept
 
-The following Foundry test enters two batches of 100 players and measures the
-gas of each `enterRaffle` call. The second batch — entering when 100 players
-are already in the array — costs far more than the first.
+The following Foundry test enters two batches of 100 players each and measures
+the gas of each `enterRaffle` call. The first batch enters an empty array; the
+second batch enters when 100 players are already registered, and costs far more.
 
 ```solidity
 function test_dos_entering_gets_more_expensive() public {
@@ -68,11 +68,11 @@ function test_dos_entering_gets_more_expensive() public {
 }
 ```
 
-Measured gas:
+Measured gas (per batch of 100 players):
 
 ```
-gas first batch:  23,990,822
-gas second batch: 88,937,355   (~3.7x the first, and above the ~30M block gas limit)
+first batch (empty array):       23,990,822
+second batch (100 already in):    88,937,355   (~3.7x the first, and above the Ethereum block gas limit)
 ```
 
 Result: `[PASS]`. Entering the same number of players costs ~3.7x more once the
