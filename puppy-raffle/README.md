@@ -38,6 +38,21 @@
 | [L-03](findings/low-and-informational.md#l-03-centralization-owner-controls-the-fee-address)                          | Centralization: owner controls the fee address                             | Low      |
 | [I-01 / I-02 / G-01](findings/low-and-informational.md)                                                               | Floating pragma, dead code, and gas optimizations                          | Info/Gas |
 
+## CodeHawks result
+
+Submitted to the AI First Flight on CodeHawks: **6/6 submissions validated**, **5 of the 10 High/Medium issues** in the codebase found (342 EXP).
+
+| My ID | Official match |
+| ----- | -------------- |
+| H-01  | H-02           |
+| H-02  | H-03           |
+| H-03  | H-05           |
+| M-01  | M-01           |
+| L-01  | L-01           |
+| L-02  | **M-02** — I rated it Low; the official list rates it Medium |
+
+The most important miss is the official H-04: `refund()` writes `address(0)` into `players[]`, and `selectWinner()` still counts that slot. Each function looks fine in isolation; the bug lives in the state they share.
+
 ## Tooling
 
 Manual review first, then static analysis with Slither and Aderyn to validate
